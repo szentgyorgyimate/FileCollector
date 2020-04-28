@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Authors>Máté Szentgyörgyi</Authors>
+    <Description>Provides a method and properties for collect all files from the given root directory and its subdirectories into one specific directory.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.IO.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+
+</Project>
