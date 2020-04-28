@@ -162,8 +162,11 @@ namespace FileCollector
         /// </summary>
         /// <exception cref="IOException">Thrown when the destination directory specified by the <see cref="DestinationDirectoryPath"/> is a file or the network name is not known.</exception>
         /// <exception cref="UnauthorizedAccessException">Thrown when the caller of create <see cref="DestinationDirectoryPath"/> does not have the required permission</exception>
-        /// <exception cref="ArgumentException">Thrown when the <see cref="DestinationDirectoryPath"/> is a zero-length string, contains only white space, or contains one or more invalid characters. You can query for invalid characters by using the GetInvalidPathChars() method or path is prefixed with, or contains, only a colon character(:).</exception>
-        /// <returns>The list of results of the dictionary collect operations.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the <see cref="DestinationDirectoryPath"/> or the <see cref="SourceRootPath" /> is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the <see cref="DestinationDirectoryPath"/> or the <see cref="SourceRootPath" /> is a zero-length string, contains only white space, or contains one or more invalid characters.</exception>
+        /// <exception cref="PathTooLongException">Thrown when the path, file name, or both specified by <see cref="DestinationDirectoryPath"> exceed the system-defined maximum length.</exception>
+        /// <exception cref="DirectoryNotFoundException">Thrown when the path specified by <see cref="SourceRootPath"/> is invalid (for example, it is on an unmapped drive).</exception>
+        /// <returns>The list of results of the directory collect operations.</returns>
         public List<CollectResult> CollectFiles()
         {
             CheckSourceRootPath();
@@ -176,7 +179,7 @@ namespace FileCollector
             {
                 _fileSystem.Directory.CreateDirectory(DestinationDirectoryPath);
             }
-
+            
             CollectFiles(SourceRootPath, resultList);
 
             return resultList.OrderBy(r => r.Path).ToList();

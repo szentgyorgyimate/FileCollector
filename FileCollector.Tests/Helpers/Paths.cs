@@ -51,11 +51,6 @@
         /// </summary>
         internal static string FakeFirstSubSubDuplicatedFilePath => $"{FakeFirstSubSubDirectoryPath}\\{DuplicateFileName}";
 
-        /// <summary>
-        /// Gets c:\source\firstsubdir\firstsubsubdir\secondsubsubfile.txt file path.
-        /// </summary>
-        internal static string FakeFirstSubSubSecondFilePath => $"{FakeFirstSubSubDirectoryPath}\\secondsubsubfile.txt";
-
         #endregion
     }
 }
