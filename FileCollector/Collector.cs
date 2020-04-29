@@ -10,7 +10,7 @@ using FileCollector.Results;
 namespace FileCollector
 {
     /// <summary>
-    /// Provides properties and instance methods for collect all files from the given root directory into one specific directroy. This class can not be inherited.
+    /// Provides properties and instance methods for collect all files from the given root directory into one specific directory. This class can not be inherited.
     /// </summary>
     public sealed class Collector : IFileCollector
     {
@@ -35,7 +35,7 @@ namespace FileCollector
         public string SourceRootPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the path of the folder where the files will be moved.
+        /// Gets or sets the path of the directory where the files will be copied or moved.
         /// </summary>
         public string DestinationDirectoryPath { get; set; }
 
@@ -50,7 +50,7 @@ namespace FileCollector
         public CollectOperation CollectOperation { get; set; }
 
         /// <summary>
-        /// Gets or sets the list of file extensions to ignore when moving files.
+        /// Gets or sets the list of file extensions to ignore when copying or moving files.
         /// </summary>
         public List<string> ExtensionsToIgnore { get; set; }
 
@@ -239,48 +239,51 @@ namespace FileCollector
             resultList.Add(collectResult);
         }
 
+        private void GenerateDestinationFilePath(FileCollectResult result)
+        {
+            var fileIndex = 0;
+            string fileName = Path.GetFileName(result.Path);
+            string lowerCaseFileName = fileName.ToLower();
+
+            if (_processedFileNames.ContainsKey(lowerCaseFileName.ToLower()))
+            {
+                _processedFileNames[lowerCaseFileName]++;
+
+                fileName = $"{Path.GetFileNameWithoutExtension(fileName)}_({_processedFileNames[lowerCaseFileName]}){Path.GetExtension(fileName)}";
+
+                result.IsRenamed = true;
+            }
+            else
+            {
+                _processedFileNames.Add(lowerCaseFileName, fileIndex);
+            }
+
+            result.NewFilePath = Path.Combine(DestinationDirectoryPath, fileName);
+        }
+
         private void MoveFiles(string path, CollectResult collectResult)
         {
             string[] filePaths = GetFilePaths(path, collectResult);
 
             foreach (string filePath in filePaths)
             {
-                var fileIndex = 0;
-                string fileName = Path.GetFileName(filePath);
-                string lowerCaseFileName = fileName.ToLower();
-
                 var result = new FileCollectResult(filePath);
-
-                if (_processedFileNames.ContainsKey(lowerCaseFileName.ToLower()))
-                {
-                    _processedFileNames[lowerCaseFileName]++;
-
-                    fileName = $"{Path.GetFileNameWithoutExtension(fileName)}_({_processedFileNames[lowerCaseFileName]}){Path.GetExtension(fileName)}";
-
-                    result.IsRenamed = true;
-                }
-                else
-                {
-                    _processedFileNames.Add(lowerCaseFileName, fileIndex);
-                }
-
-                string destinationFilePath = Path.Combine(DestinationDirectoryPath, fileName);
-                result.NewFilePath = destinationFilePath;
+                GenerateDestinationFilePath(result);
 
                 try
                 {
                     switch (CollectOperation)
                     {
                         case CollectOperation.Copy:
-                            _fileSystem.File.Copy(filePath, destinationFilePath, Overwrite);
+                            _fileSystem.File.Copy(filePath, result.NewFilePath, Overwrite);
                             break;
                         case CollectOperation.Move:
-                            if (Overwrite && _fileSystem.File.Exists(destinationFilePath))
+                            if (Overwrite && _fileSystem.File.Exists(result.NewFilePath))
                             {
-                                _fileSystem.File.Delete(destinationFilePath);
+                                _fileSystem.File.Delete(result.NewFilePath);
                             }
 
-                            _fileSystem.File.Move(filePath, destinationFilePath);
+                            _fileSystem.File.Move(filePath, result.NewFilePath);
                             break;
                     }
 

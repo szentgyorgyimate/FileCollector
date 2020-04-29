@@ -22,11 +22,6 @@
         internal static string FakeSecondFilePath => $"{FakeSourcePath}\\secondfile.jpg";
 
         /// <summary>
-        /// Gets c:\source\thirdfile.bin file path.
-        /// </summary>
-        internal static string FakeThirdFilePath => $"{FakeSourcePath}\\thirdfile.bin";
-
-        /// <summary>
         /// Gets c:\source\firstsubdir directory path.
         /// </summary>
         internal static string FakeFirstSubDirectoryPath => $"{FakeSourcePath}\\firstsubdir";
