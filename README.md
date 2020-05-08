@@ -5,6 +5,7 @@ File collector is a tool for collect files from the given root directory and its
 I had a lot of old pictures and various files buried in folders and their subfolders (categorised by year, month, etc.), and I wanted to collect them all in one place to easily save them to the cloud from there. That was my main motivation to write this tool.
 
 ## Table of contents
+
 1. [Basic usage](#basic-usage)
 2. [Configuration](#configuration)
 3. [CollectFiles() method](#collectfiles-method)
@@ -12,6 +13,7 @@ I had a lot of old pictures and various files buried in folders and their subfol
    - [CollectResultBase class](#collectresultbase-class) 
    - [CollectResult class](#collectresult-class)
    - [FileCollectResult class](#filecollectresult-class)
+5. [Testing](#testing)
 
 ## Basic usage
 1. Add `using FileCollector`.
@@ -141,4 +143,7 @@ string fileInSubDirNewPath = fileInSubDirResult.NewFilePath // "c:\destination\d
 
 ```
 
-The `NewFilePath` of the `duplicate.txt` file which sits in the `c:\source\subdir` directory will be `"c:\destination\duplicate_(1).txt"` and its `IsRenamed` property will be `true`. 
+The `NewFilePath` of the `duplicate.txt` file which sits in the `c:\source\subdir` directory will be `"c:\destination\duplicate_(1).txt"` and its `IsRenamed` property will be `true`.
+
+## Testing
+FileCollector uses [xunit](https://github.com/xunit/xunit) for unit testing and [System.IO.Abstractions](https://github.com/System-IO-Abstractions/System.IO.Abstractions) for file system mocking.
